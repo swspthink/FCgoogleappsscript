@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>이름정보수집</title>
+  </head>
+  <body>
+    <h2>이름, 아이디 수집</h2><br><br>
+
+    <script>
+      function spreadSubmit(){
+        google.script.run.getValuesSpread(document.forms[0]);//.gs파일에서 getValuesSpread함수를 실행시키라는 명령어
+        // 아래 항목은 09_04에서 다시 설명
+        // google.script.run.withSuccessHandler(getText).getValuesSpread(document.forms[0]); //아래에 있는 getText값에 .gs의 결과값을 대입
+        // setTimeout('getnote()', 2000);  //약 2초정도 후에 아래에 있는 getnote함수 실행
+      }
+
+      // function getText(text){
+      //   const txtTextt = document.getElementById('mtext');
+      //   txtTextt.value = text
+      // }
+
+      // function getnote(){
+      //   const alt = document.getElementById('mtext').value;
+      //   alert(alt);
+      //   document.getElementById("myForm").reset();
+      // }
+    </script>
+
+    <form id="myForm">
+      <label>이름:</label> <input type="text" id="txtBox1" name="txtBox1" size="12" maxlength="250" style=" border:solid 5 #60cb00; padding:2 5; height:28px; width:300;"><br><br>
+      <label>아이디:</label> <input type="text" id="txtBox2" name="txtBox2" size="12" maxlength="250" style=" border:solid 5 #60cb00; padding:2 5; height:28px; width:300;"><br><br>
+
+      <input onclick="spreadSubmit()" type="button" value="입력">
+      <input type="hidden" id="mtext" name="mtext">
+    </form>
+  </body>
+</html>
