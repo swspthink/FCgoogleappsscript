@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>구글시트 데이터로 select 만들기</title>
+  </head>
+  <body>
+    <h2>구글시트 데이터로 select 만들기</h2>
+
+    <form id="myForm">
+      <div class="container">
+        <tr>
+          <td>성명</td>
+          <td><select id="username" style="width:100px">
+                <option disabled selected>이름 선택</option>
+                <? for(let i=0; i<namelist.length; i++){ ?>
+                <option><?= namelist[i]; ?></option>
+                <? } ?>
+              </select>
+          </td>
+        </tr>
+        <tr>
+          <td>아이디</td>
+          <td><select id="idname" style="width:100px">
+                <option disabled selected>아이디 선택</option>
+                <? for(let i=0; i<reidlist.length; i++){ ?>
+                <option><?= reidlist[i]; ?></option>
+                <? } ?>
+              </select>
+          </td>
+        </tr>
+      </div>
+    </form>
+  </body>
+</html>
