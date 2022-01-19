@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <script>
+      function SearchFromTotal(){
+        Clear2();
+        google.script.run.withSuccessHandler(spreadform)
+        .withFailureHandler(missionFail)
+        .getNumberS(document.forms[0]);
+      }
+
+      function spreadform(spread){
+        if(spread[0][0] === "1970-01-01"){document.getElementById('docdate').value = "";}else{document.getElementById('docdate').value = spread[0][0];}
+        document.getElementById('docname').value = spread[0][1];
+        document.getElementById('docteam').value = spread[0][2];
+        document.getElementById('docowe').value = spread[0][3];
+        document.getElementById('docwork').value = spread[0][4];
+        document.getElementById('docpaper').value = spread[0][5];
+        document.getElementById('docetc').value = spread[0][6];
+      }
+
+      function missionFail(){
+        alert("대상자가 없거나 자료를 가져오지 못했습니다.");
+      }
+
+      function Clear2(){
+        docdate.value = ""; docname.value = "";  docteam.value = ""; docowe.value = ""; docwork.value = ""; docpaper.value = ""; docetc.value = "";
+      }
+
+      function Clear(){
+      document.getElementById("myForm").reset();
+      alert("삭제되었습니다.");
+      }
+
+      // UPDATE부분
+      function Editor(){
+        if(docdate.value.length == 0){alert("날짜를 입력하세요");docdate.focus();return false;
+        }else if(docname.value.length == 0){alert("문서제목을 입력하세요");docname.focus();return false;
+        }else if(docowe.value.length == 0){alert("담당자를 입력하세요");docowe.focus();return false;
+        }else if(docwork.value.length == 0){alert("사업구분을 입력하세요");docwork.focus();return false;
+        }else{
+          google.script.run.withSuccessHandler(missSuccess).withFailureHandler(missFail).setEditor(document.forms[0]);
+          Clear2();
+        }
+      }
+      function missSuccess(){alert("정보수정을 완료 했습니다.");SearchFromTable();}
+      function missFail(){alert("정보수정에 실패하였습니다.");}
+
+      // CREATE부분
+      function spreadSubmit(){
+        if(docdate.value.length == 0){alert("날짜를 입력하세요");docdate.focus();return false;
+        }else if(docname.value.length == 0){alert("문서제목을 입력하세요");docname.focus();return false;
+        }else if(docowe.value.length == 0){alert("담당자를 입력하세요");docowe.focus();return false;
+        }else if(docwork.value.length == 0){alert("사업구분을 입력하세요");docwork.focus();return false;
+        }else{
+        RecordInput2();
+        }
+      }
+
+      function RecordInput2(){
+        google.script.run
+        .withSuccessHandler(recoSuccess)
+        .withFailureHandler(recoFail)
+        .newRecord(document.forms[0]);
+      }
+      function recoSuccess(){
+      alert("문서저장을 완료 했습니다.");
+      document.getElementById("myForm").reset();
+      SearchFromTable();
+      }
+      function recoFail(){
+      alert("문서저장에 실패하였습니다.");
+      }
+
+    </script>
+    <form id="myForm">
+
+      <div id="menu" style="width:550px;float:left;">
+          <table width="500" cellpadding="2" cellspacing="1" bgcolor="#cccccc">
+            <tr>
+              <td colspan="4" align="center"><b>문서정보</b></td>
+            </tr>
+
+            <tr>
+              <td colspan="1" align="center" bgcolor="#f4f4f4">문서번호</td>
+              <td colspan="3" bgcolor="#ffffff"><select  style="width:150px" onchange="viewContent()" id="document" name="document" >
+                <option value=""selected>문서번호선택</option>
+                <? for(var i=0;i<dlist.length;i++){ ?>
+                <option><?= dlist[i]; ?></option>
+                <? } ?>
+                </select>
+              <input onclick="SearchFromTotal()" type="button" value="검색" name="record2" align="right"/>&nbsp;
+              <input onclick="Editor()" type="button" value="수정후저장" name="record3" align="right"/>&nbsp;
+              <input onclick="Clear()" type="button" value="clear" name="record4" align="right"/>
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="1" align="center" bgcolor="#f4f4f4">날짜</td>
+              <td colspan="3" bgcolor="#ffffff"><input type="date" id="docdate" name="docdate"></td>
+            </tr>
+
+            <tr>
+              <td colspan="1" align="center" bgcolor="#f4f4f4">제목</td>
+              <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="100" size="40" id="docname" name="docname"></td>
+            </tr>
+
+            <tr>
+              <td colspan="1" align="center" bgcolor="#f4f4f4">담당부서</td>
+              <td colspan="1" bgcolor="#ffffff"><input type="text" maxlength="10" size="10" id="docteam" name="docteam" value="총무" readonly></td>
+              <td colspan="1" align="center" bgcolor="#f4f4f4">담당자</td>
+              <td colspan="1" bgcolor="#ffffff"><select  style="width:100px" onchange="viewContent()" id="docowe" name="docowe">
+                <option value=""selected>담당자선택</option>
+                <? for(var i=0;i<mlist.length;i++){ ?>
+                <option><?= mlist[i]; ?></option>
+                <? } ?></select></td>
+            </tr>
+
+            <tr>
+              <td colspan="1" align="center" bgcolor="#f4f4f4">사업구분</td>
+              <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="10" size="10" id="docwork" name="docwork"></td>
+            </tr>
+
+            <tr>
+              <td colspan="1" align="center" bgcolor="#f4f4f4">첨부물</td>
+              <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="40" size="40" id="docpaper" name="docpaper"></td>
+            </tr>
+
+            <tr>
+              <td colspan="1" align="center" bgcolor="#f4f4f4">비고</td>
+              <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="40" size="40" id="docetc" name="docetc"></td>
+            </tr>
+            <input type="hidden" id="mtext" name="mtext">
+            </table>
+        <br>
+        <center><input type="button" value="내부공문입력" onclick="spreadSubmit()" style="font-size:15pt; width:200px; height:30px"> </center><br>
+      </div>
+
+      <div style="top: 0px">
+       <table>
+       <?!= include('list'); ?>
+       </table>
+      </div>
+
+    </form>
+
+  </body>
+</html>

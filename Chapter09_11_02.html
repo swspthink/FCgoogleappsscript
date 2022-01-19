@@ -1,0 +1,68 @@
+<script>
+  //페이지 로딩시 함수 자동실행
+  window.onload=SearchFromTable;
+
+  //페이지 검색해서 리스트로 프린트해줌
+  function SearchFromTable(){
+    DeleteTable();
+    google.script.run.withSuccessHandler(generateTable).getTTableData(document.forms[0]);
+  }
+
+  function generateTable(dataArray){
+    var tbody =  document.getElementById("table-body");
+      dataArray.forEach(function(r){
+        var row = document.createElement("tr");
+        var col1 = document.createElement("td");
+        col1.textContent = r[0];
+        var col2 = document.createElement("td");
+        col2.textContent = r[1];
+        var col3 = document.createElement("td");
+        col3.textContent = r[2];
+        var col4 = document.createElement("td");
+        col4.textContent = r[3];
+        var col5 = document.createElement("td");
+        col5.textContent = r[4];
+        var col6 = document.createElement("td");
+        col6.textContent = r[5];
+        row.appendChild(col1);
+        row.appendChild(col2);
+        row.appendChild(col3).style = 'display:date';
+        row.appendChild(col4);
+        row.appendChild(col5);
+        row.appendChild(col6);
+        tbody.appendChild(row);
+      });
+  }
+
+  function DeleteTable(){
+   var body = document.getElementById("table-body");
+   body.textContent = null;
+  }
+
+  function SearchFromTable1(){
+     DeleteTable();
+     google.script.run.withSuccessHandler(generateTable).getTTableData(document.forms[0]);
+  }
+  function SearchFromTable2(){
+     DeleteTable();
+     google.script.run.withSuccessHandler(generateTable).getTTableData2(document.forms[0]);
+  }
+</script>
+  <input onclick="SearchFromTable1()" type="button" value="최근(15개)" name="record1"/>&nbsp;
+  <input onclick="SearchFromTable2()" type="button" value="전체보기" name="record2"/>&nbsp;
+  <table border="2">
+    <thead>
+      <tr>
+          <th>연번</th>
+          <th>문서번호</th>
+          <th>날짜</th>
+          <th>문서제목</th>
+          <th>담당부서</th>
+          <th>담당자</th>
+      </tr>
+    </thead>
+
+    <tbody id="table-body">
+    </tbody>
+
+  </table>
