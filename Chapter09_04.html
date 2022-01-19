@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>명단수집</title>
+  </head>
+  <body>
+
+    <script>
+      function spreadSubmit(){
+        const pattern = /^\d{2,3}\d{3,4}\d{4}$/;
+        const checkbox = document.getElementById('textBoxname1').checked;
+        if (mname.value.length == 0){
+        alert("성명을 입력하세요");
+        mname.focus();
+        return false;
+        }else if(mdate.value.length == 0){
+        alert("생년월일을 입력하세요");
+        mdate.focus();
+        return false;
+        }else if(pattern.test(phone.value) === false){
+        alert("전화번호를 입력하세요");
+        phone.focus();
+        return false;
+        }else if(checkbox == false){
+        alert("개인정보 수집 및 이용동의를 확인해주세요");
+        return false;
+        }else{//여기서부터 다시 할것
+        spreadSubmit2();
+        }
+      }
+
+      function spreadSubmit2(){
+        mtext.value = "";
+        google.script.run.getSpreadSheet(document.forms[0]);
+        setTimeout(1000);
+        google.script.run.withSuccessHandler(getText).getSpreadSheet(document.forms[0]); //아래에 있는 getText값에 .gs의 결과값을 대입
+        setTimeout('note()', 2000);//약 2초정도 후에 아래에 있는 note함수 실행
+      }
+
+      function note(){
+        var alt = document.getElementById('mtext').value;
+        alert(alt);
+        document.getElementById("myForm").reset();
+      }
+
+      function getText(text){
+        var txtTextt = document.getElementById('mtext');
+        txtTextt.value = text;
+      }
+    </script>
+
+
+    <h1>개인별 명단 수집</h1>
+    <table width="400" cellpadding="2" cellspacing="1" bgcolor="#cccccc">
+      <form id="myForm">
+        <tr>
+        <td colspan="4" align="center"><b>기본정보</b></td>
+        </tr>
+        <tr>
+        <td colspan="1" align="center" bgcolor="#f4f4f4">성명</td>
+        <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="10" size="10" id="mname" name="mname"></td>
+        </tr>
+        <tr>
+        <td colspan="1" align="center" bgcolor="#f4f4f4">생년월일</td>
+        <td colspan="3" bgcolor="#ffffff"><input type="date" maxlength="10" size="10" id="mdate" name="mdate"></td>
+        </tr>
+        <tr>
+        <td colspan="1" align="center" bgcolor="#f4f4f4">전화번호</td>
+        <td colspan="3" bgcolor="#ffffff">
+        <input type="text" maxlength="15" size="20" id="phone" name="phone" placeholder="'-'없이숫자만입력하세요">
+        </tr>
+        <tr>
+        <td colspan="1" align="center" bgcolor="#f4f4f4">개인정보 수집<br> 및 이용 동의</td>
+        <td colspan="3" bgcolor="#ffffff" align="center"><input type="radio" value="동의" id="textBoxname1" name="textBoxname1">동의</td>
+        </tr>
+
+        <input type="hidden" id="mtext" name="mtext">
+      </form>
+    </table>
+    <br><br>
+    &nbsp;&nbsp; <input type="button" value="개인정보저장" onclick="spreadSubmit()" id="mybutton" style="width:150px; height:40px;font-size:14px;">
+
+  </body>
+</html>
