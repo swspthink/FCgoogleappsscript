@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>상담일지</title>
+  </head>
+  <body>
+
+    <script>
+      function spreadSubmit(){
+        if(mname.value == ""){
+          alert("이름을 입력하세요");
+          mname.focus();
+        }else if(mdate.value == ""){
+          alert("날짜를 입력하세요");
+          mdate.focus();
+        }else if(tBoxname1.value == ""){
+          alert("상담내용을 입력하세요");
+          tBoxname1.focus();
+        }else if(tBoxname2.value == ""){
+          alert("담당자를 입력하세요");
+          tBoxname2.focus();
+        }else{
+          spreadSubmit2();
+        }
+
+        function spreadSubmit2(){
+          google.script.run
+          .withSuccessHandler(missionSuccess)
+          .withFailureHandler(missionFail)
+          .getValuesSpread(document.forms[0]);
+          document.getElementById("myForm").reset();
+        }
+        function missionSuccess(){
+          alert("전송을 성공적으로 마쳤습니다.");
+        }
+        function missionFail(){
+          alert("전송실패");
+        }
+      }
+    </script>
+
+    <!-- 여기서부터 보여지는 창 -->
+    <table width="500" cellpadding="2" cellspacing="1" bgcolor="#cccccc">
+      <form id="myForm">
+        <tr>
+        <td colspan="4" align="center"><b>상담일지 입력</b></td>
+        </tr>
+
+        <tr>
+        <td colspan="1" align="center" bgcolor="#f4f4f4">성명</td>
+        <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="10" size="10" id="mname" name="mname"></td>
+        </tr>
+
+        <tr>
+        <td colspan="1" align="center" bgcolor="#f4f4f4">일자</td>
+        <td colspan="3" bgcolor="#ffffff"><input type="date" maxlength="10" size="10" id="mdate" name="mdate"></td>
+        </tr>
+
+        <tr>
+        <td colspan="1" align="center" bgcolor="#f4f4f4">상담내용</td>
+        <td colspan="3" bgcolor="#ffffff"><textarea type="text" rows="10" cols="50" id="tBoxname1" name="tBoxname1"></textarea></td>
+        </tr>
+
+        <tr>
+        <td colspan="1" align="center" bgcolor="#f4f4f4">담당자</td>
+        <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="10" size="10" id="tBoxname2" name="tBoxname2"></td>
+        </tr>
+      </form>
+    </table>
+    <br>
+      &nbsp;&nbsp;
+      <input onclick="spreadSubmit()" type="button" value="입력">
+  </body>
+</html>
