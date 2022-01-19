@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>출퇴근기록(재택)</title>
+  </head>
+  <body>
+
+    <h1>출퇴근기록(제한시간 이외에 입력되지 않음)</h1>
+      <script>
+        function spreadSubmit1(){
+          if(teamid.value.length == 0){
+            alert("팀명을 입력하세요");
+            return false;
+          }else if(mname1.value.length == 0){
+            alert("성명을 입력하세요");
+            return false;
+          }else{
+            spreadSubmit2();
+        }
+        }
+
+        function spreadSubmit2(){
+          mtext.value = "";
+          const time = new Date();
+          const hour = time.getHours();
+          const minu = time.getMinutes();
+          if(hour == 8) {
+            Spread5();
+          } else if(hour == 12) {
+            Spread5();
+          } else if(hour == 18) {
+            Spread6();
+          } else {
+            alert("지금은 입력시간이 아닙니다.")
+          }
+        }
+
+        function note(){
+          const alt = document.getElementById('mtext').value;
+          alert(alt);
+          teamid.value = ""; mname1.value = "";
+        }
+
+        function Spread5(){//해당시간에서부터 40분~59분까지 입력이 가능하게 설정
+          const time2 = new Date();
+          const hour2 = time2.getHours();
+          const minu2 = time2.getMinutes();
+          if(minu2 > 39) {
+            google.script.run.getSpreadSheet(document.forms[0]);
+            setTimeout(1000);
+            google.script.run.withSuccessHandler(getText).getSpreadSheet(document.forms[0]);
+            setTimeout('note()', 2000);
+          }else{
+            alert("지금은 입력시간이 아닙니다.")
+          }
+        }
+
+        function Spread6(){//해당시간 정시에서부터 19분까지 입력이 가능하게 설정
+          const time3 = new Date();
+          const hour3 = time3.getHours();
+          const minu3 = time3.getMinutes();
+          if(minu3 < 20) {
+            google.script.run.getSpreadSheet(document.forms[0]);
+            setTimeout(1000);
+            google.script.run.withSuccessHandler(getText).getSpreadSheet(document.forms[0]);
+            setTimeout('note()', 2000);
+          }else{
+            alert("지금은 입력시간이 아닙니다.")
+          }
+        }
+
+        function getText(text){
+            const txtText = document.getElementById('mtext');
+            txtText.value = text;
+          }
+
+      </script>
+
+        <!-- 여기서 부터가 창입니다~! -->
+
+        <table width="500" cellpadding="2" cellspacing="1" bgcolor="#cccccc">
+        <form>
+        <tr>
+        <td colspan=4 align="center"><b>기본정보</b></td>
+        </tr>
+        <tr>
+        <td colspan=1 align="center" bgcolor="#f4f4f4">팀명</td>
+        <td colspan=3 bgcolor="#ffffff"><select id="teamid" name="teamid" maxlength="20">
+        <option value=""select>팀선택</option>
+        <option value="기획팀">기획팀</option>
+        <option value="총무팀">총무팀</option>
+        <option value="마케팅팀">마케팅팀</option>
+        </select></td>
+        </tr>
+
+        <tr>
+        <td colspan=1 align="center" bgcolor="#f4f4f4">성명</td>
+        <td colspan=3 bgcolor="#ffffff"><select  style="width:100px" onchange="viewContent()" id="mname1" name="mname1" >
+            <option disabled selected>성명 선택</option>
+            <? for(var i=0;i<list.length;i++){ ?>
+            <option><?= list[i]; ?></option>
+            <? } ?>
+            </select></td>
+        </tr>
+
+          <input type="hidden" id="mtext" name="mtext">
+
+        </form>
+        </table>
+        <br>
+
+        &nbsp;&nbsp; <input type="button" value="출퇴근입력" onclick="spreadSubmit1()" id="mybutton">
+        <br>출퇴근기록 입력 후 입력결과 값을 확인하시고(팝업창을 확인) 창을 닫아주세요~!
+        <br>입력시간이 아닌 시간에는 입력이 되지 않습니다~!
+
+  </body>
+</html>
