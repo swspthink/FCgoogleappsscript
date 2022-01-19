@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+  </head>
+  <body>
+    <h1>2580 차량사용대장입력</h1>
+      <script>
+        function spreadSubmit(){
+          if (mdate.value == ""){
+          alert("운행일자를 입력하세요");
+          mdate.focus();
+          return false;
+          }else if(mname1.value.length == 0){
+          alert("사용자 및 동승자를 입력하세요");
+          mname1.focus();
+          return false;
+          }else if(mname2.value.length == 0){
+          alert("용무를 입력하세요");
+          mname2.focus();
+          return false;
+          }else if(mname3.value.length == 0){
+          alert("목적지를 입력하세요");
+          mname3.focus();
+          return false;
+          }else if(mtime1.value == ""){
+          alert("출발시간을 입력하세요");
+          mtime1.focus();
+          return false;
+          }else if(mtime2.value == ""){
+          alert("도착시간을 입력하세요");
+          mtime2.focus();
+          return false;
+          }else if(mname4.value.length == 0){
+          alert("총 운행거리를 입력하세요");
+          mname4.focus();
+          return false;
+          }else{
+          spreadSubmit2();
+          }
+        }
+
+        function spreadSubmit2(){
+         google.script.run
+         .withSuccessHandler(missionSuccess)
+         .withFailureHandler(missionFail)
+         .getValuesSpread(document.forms[0]);
+         document.getElementById("myForm").reset();
+        }
+
+        function missionSuccess(){
+          alert("입력이 완료되었습니다..");
+        }
+        function missionFail(){
+          alert("입력이 되지않았습니다.");
+        }
+      </script>
+
+      <!-- 여기서 부터가 화면정보 -->
+    <table width="500" cellpadding="2" cellspacing="1" bgcolor="#cccccc">
+      <form id="myForm">
+      <tr>
+      <td colspan="4" align="center"><b>기본정보</b></td>
+      </tr>
+
+      <tr>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">차종</td>
+      <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="10" size="10" id="carid1" name="carid1" value="K5" readonly></td>
+      </tr>
+
+      <tr>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">차량번호</td>
+      <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="10" size="10" id="carid2" name="carid2" value="33다2580" readonly></td>
+      </tr>
+
+      <tr>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">운행일자</td>
+      <td colspan="3" bgcolor="#ffffff"><input type="date" id="mdate" name="mdate"></td>
+      </tr>
+
+      <tr>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">사용자 및 동승자</td>
+      <td colspan="1" bgcolor="#ffffff"><input type="text" maxlength="10" size="10" id="mname1" name="mname1"></td>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">탑승인원</td>
+      <td colspan="1" bgcolor="#ffffff"><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="10" size="10" id="cname1" name="cname1"></td>
+      </tr>
+
+      <tr>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">용무</td>
+      <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="40" size="40" id="mname2" name="mname2"></td>
+      </tr>
+
+      <tr>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">목적지</td>
+      <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="40" size="40" id="mname3" name="mname3"></td>
+      </tr>
+
+      <tr>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">운행시간</td>
+      <td colspan="3" bgcolor="#ffffff">출발: <input type="time" min="00:00" max="24:00" step="300" id="mtime1" name="mtime1" required>
+      ~ 도착: <input type="time" min="00:00" max="24:00" step="300" id="mtime2" name="mtime2" required></td> <!--5분단위로 입력가능 -->
+      </tr>
+
+      <tr>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">총운행거리(km)</td>
+      <td colspan="3" bgcolor="#ffffff"><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="10" size="10" id="mname4" name="mname4" placeholder="숫자만입력하세요" numberOnly></td>
+      </tr>
+      <tr>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">급유량(L)</td>
+      <td colspan="1" bgcolor="#ffffff"><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="10" size="10" id="mname5" name="mname5" placeholder="숫자만입력하세요" numberOnly></td>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">급유금액(원)</td>
+      <td colspan="1" bgcolor="#ffffff"><input type="text" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="10" size="10" id="mname6" name="mname6" placeholder="숫자만입력하세요" numberOnly></td>
+      </tr>
+
+      <tr>
+      <td colspan="1" align="center" bgcolor="#f4f4f4">기타사항</td>
+      <td colspan="3" bgcolor="#ffffff"><input type="text" maxlength="40" size="40" id="mname7" name="mname7"></td>
+      </tr>
+      </form>
+    </table>
+<br>
+&nbsp;&nbsp; <input type="button" value="차량운행일지입력" onclick="spreadSubmit()">
+  </body>
+</html>
