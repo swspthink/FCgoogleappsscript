@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <title>main.html</title>
+  </head>
+  <body>
+    <h1>웹창 여러개 만들기</h1>
+    <h2>This is main page</h2>
+    <br><br>
+
+    <a href="<?=ScriptApp.getService().getUrl(); ?>?v=window1" target="view">[첫번째 페이지로 이동]</a>
+    <br><br>
+    <a href="<?=ScriptApp.getService().getUrl(); ?>?v=window2" target="_top">[두번째 페이지로 이동]</a>
+  </body>
+</html>
