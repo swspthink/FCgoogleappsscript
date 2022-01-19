@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<base target="_top">
+</head>
+<body>
+<center>
+  <h1>회 원 관 리</h1>
+
+  <script>
+    // READ부분
+    function SearchFromTotal(){
+    Clear2();
+    google.script.run.withSuccessHandler(spreadform)
+    .withFailureHandler(missionFail)
+    .getNumberS(document.forms[0]);
+    }
+
+    function spreadform(spread){
+    document.getElementById('mbirth').value = spread[0][0];
+    document.getElementById('msex').value = spread[0][1];
+    document.getElementById('memail').value = spread[0][2];
+    document.getElementById('mphone').value = spread[0][3];
+    if(spread[0][4] === "1970-01-01"){document.getElementById('mdate').value = "";}else{document.getElementById('mdate').value = spread[0][4];}
+    document.getElementById('mber').value = spread[0][5];
+    document.getElementById('metc').value = spread[0][6];
+    }
+
+    function missionFail(){
+     alert("대상자가 없거나 자료를 가져오지 못했습니다.");
+    }
+
+    // UPDATE부분
+    function Editor(){
+      google.script.run
+      .withSuccessHandler(missSuccess)
+      .withFailureHandler(missFail)
+      .setEditor(document.forms[0]);
+    }
+    function missSuccess(){
+     alert("정보수정을 완료 했습니다.");
+    }
+    function missFail(){
+     alert("정보수정에 실패하였습니다.");
+    }
+
+    // CREATE부분
+    function RecordInput(){
+      const pattern = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$/;
+      if (mname.value.length == 0){alert("성명을 입력하세요");mname.focus();return false;
+      }else if(mbirth.value.length == 0){alert("생년월일을 입력하세요");mbirth.focus();return false;
+      }else if(msex.value.length == 0){alert("성별을 입력하세요");msex.focus();return false;
+      // }else if(memail.value.length == 0){alert("이메일을 입력하세요");memail.focus();return false;
+      }else if(pattern.test(memail.value) === false){alert("이메일을 입력하세요");memail.focus();return false;
+      }else if(mphone.value.length == 0){alert("연락처를 입력하세요");mphone.focus();return false;
+      }else if(mdate.value.length == 0){alert("가입일을 입력하세요");mdate.focus();return false;
+      }else if(mber.value.length == 0){alert("회원구분을 입력하세요");mber.focus();return false;
+      }else{
+      RecordInput2();
+      }
+    }
+
+    function RecordInput2(){
+      google.script.run
+      .withSuccessHandler(recoSuccess)
+      .withFailureHandler(recoFail)
+      .newRecord(document.forms[0]);
+    }
+    function recoSuccess(){
+     alert("신규입력을 완료 했습니다.");
+     document.getElementById("myForm").reset();
+    }
+    function recoFail(){
+     alert("신규입력에 실패하였습니다.");
+    }
+
+    //DELETE부분
+    function Delete(){
+      google.script.run
+      .withSuccessHandler(deleSuccess)
+      .withFailureHandler(deleFail)
+      .rowDelete(document.forms[0]);
+    }
+    function deleSuccess(){
+     alert("삭제를 완료 했습니다.");
+     document.getElementById("myForm").reset();
+    }
+    function deleFail(){
+     alert("삭제에 실패하였습니다.");
+    }
+  </script>
+
+<!-- 삭제 -->
+
+  <script>
+
+    function Clear(){
+      document.getElementById("myForm").reset();
+      alert("삭제되었습니다.");
+    }
+
+    function Clear2(){
+      mbirth.value = ""; msex.value = "";  memail.value = ""; mphone.value = ""; mdate.value = ""; mber.value = ""; metc.value = "";
+    }
+
+  </script>
+
+<table width="700" cellpadding="2" cellspacing="1" bgcolor="#cccccc">
+
+<form id="myForm">
+<div class="container">
+<div class="row">
+<div id="menu" style="width:700px;float:left;">
+<tr>
+<td colspan="6" align="center"><b>기본정보</b></td>
+</tr>
+<tr>
+<td colspan="1" align="center" bgcolor="#f4f4f4">성명</td>
+<td colspan="5" bgcolor="#ffffff"><input type="text" maxlength="10" size="10" id="mname" name="mname">
+<input onclick="RecordInput()" type="button" value="신규입력(Create)" name="record1"/>
+<input onclick="SearchFromTotal()" type="button" value="검색(Read)" name="record2"/>
+<input onclick="Editor()" type="button" value="수정(Update)" name="record3"/>
+<input onclick="Delete()" type="button" value="삭제(Delete)" name="record4"/>
+<input onclick="Clear()" type="button" value="Clear" name="record5"/>
+</td>
+</tr>
+<?!= include('form'); ?>
+<br>
+</div>
+</div>
+</div>
+
+</form>
+
+
+</table>
+</center>
+</body>
+</html>
