@@ -36,16 +36,16 @@ function credataPDFs(){
   const datasheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("명단");
   const data = datasheet.getRange(2,2,datasheet.getLastRow()-1,3).getDisplayValues();
   // console.log(data);
-  let errors = [];
+  let array = [];
   data.forEach(row => {
     try{
       createPDFs(row[0],row[1],pdfFolder);
-      errors.push(["Success"]);
+      array.push(["Success"]);
     } catch(err){
-      errors.push(["Fail"]);
+      array.push(["Fail"]);
     }
   }); //close forEach
-  datasheet.getRange(2, 5, datasheet.getLastRow()-1, 1).setValues(errors);
+  datasheet.getRange(2, 5, datasheet.getLastRow()-1, 1).setValues(array);
 }
 
 function createPDFs(cpNumber, cpName, pdfFolder){ //credataPDFs에서 값을 받아 pdf로 변환

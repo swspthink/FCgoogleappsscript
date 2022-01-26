@@ -7,16 +7,16 @@ function dataPDF(){
   const datasheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("명단");
   const data = datasheet.getRange(2,2,datasheet.getLastRow()-1,3).getDisplayValues();
   // console.log(data);
-  let errors = [];
+  let array = [];
   data.forEach(row => {
     try{
       doctoPDFs(row[0], row[1], row[2], docFile, dcpdfFolder);
-      errors.push(["Success"]);
+      array.push(["Success"]);
     } catch(err){
-      errors.push(["Fail"]);
+      array.push(["Fail"]);
     }
   }); //close forEach
-  datasheet.getRange(2, 5, datasheet.getLastRow()-1, 1).setValues(errors);
+  datasheet.getRange(2, 5, datasheet.getLastRow()-1, 1).setValues(array);
 }
 
 function doctoPDFs(dataNumber, dataName, dataBirth, docFile, dcpdfFolder){
