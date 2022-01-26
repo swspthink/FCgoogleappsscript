@@ -7,7 +7,7 @@ function afterFormSubmit(e){//설문지(form)에서 받은 내용을 pdf파일�
   sheet.getRange(entryRow, 6).setValue(formpdfFile.getUrl());
   sheet.getRange(entryRow, 7).setValue(formpdfFile.getName());
 
-  //이메일로 보내기
+  //이메일로 보내기로 하단 명령어와 연결됨
   sendEmail(e.namedValues['성명'][0], e.namedValues['이메일 주소'][0], formpdfFile);
 }
 
